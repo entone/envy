@@ -3,11 +3,13 @@ import logging
 
 class Controller(object):
     request = None
+    session = None
     settings = None
 
-    def __init__(self, request, settings=None):
+    def __init__(self, request, session=None, settings=None):
         self.request = request
-        self.settings = settings
+        self.session = session
+        self.settings = settings    
         self.logger = logging.getLogger("%s.%s" % (self.__module__, self.__class__.__name__))
 
     def render(self, temp, **kwargs):
