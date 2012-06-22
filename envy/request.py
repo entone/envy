@@ -7,4 +7,4 @@ class Request(object):
     def __init__(self, env):
         self.env = env
         self.GET = urlparse.parse_qs(env['QUERY_STRING'])
-        self.COOKIE = Cookie.SimpleCookie(env['HTTP_COOKIE'])
+        self.COOKIE = Cookie.SimpleCookie(env.get('HTTP_COOKIE'))

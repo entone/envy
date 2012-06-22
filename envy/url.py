@@ -19,8 +19,8 @@ class URL(object):
             return True
         return False
 
-    def cls(self, env, settings):
-        return self.method.im_class(Request(env), settings)
+    def cls(self, request, session=None, settings=None):
+        return self.method.im_class(request, session=session, settings=settings)
 
     @property
     def meth(self):

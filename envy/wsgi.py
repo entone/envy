@@ -11,7 +11,7 @@ class WSGI(object):
     def __init__(self, urls, settings=None):
         self.urls = urls
         self.settings = settings
-        self.settings['templates'] = TemplateLookup(directories=self.settings.template_dirs, output_encoding='utf-8', encoding_errors='replace')
+        self.settings['templates'] = TemplateLookup(directories=self.settings.get('template_dirs'), output_encoding='utf-8', encoding_errors='replace')
 
     def match(self, path):
         for u in self.urls:
@@ -20,13 +20,16 @@ class WSGI(object):
         return False
 
     def serve(self, env, start_response):
-        url = self.match(env['PATH_INFO'][1:])        
-        request = Request(env)
-        session_key = request.COOKIES.get(self.settings.get('session_key'))
-        session = self.settings.get("session_cls")(key=session_key, request=request)
+        try:
+            url = self.match(env['PATH_INFO'][1:])
+            request = Request(env)
+            session_key = request.COOKIE.get(self.settings.get('session_key'))
+            session = self.settings.get("session_cls")(key=session_key, request=request)
+        except Exception as e:
+            logging.exception(e)
         if url:
             try:
-                controller = url.cls(request, session, self.settings)
+                controller = url.cls(request=request, session=session, settings=self.settings)
                 response = getattr(controller, url.meth)(**url.kwargs)
                 controller.session.save(response=response)
             except Exception as e:

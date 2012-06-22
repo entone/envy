@@ -6,10 +6,10 @@ class Controller(object):
     session = None
     settings = None
 
-    def __init__(self, request, session=None, settings=None):
+    def __init__(self, request=None, session=None, settings=None):
         self.request = request
         self.session = session
-        self.settings = settings    
+        self.settings = settings
         self.logger = logging.getLogger("%s.%s" % (self.__module__, self.__class__.__name__))
 
     def render(self, temp, **kwargs):
