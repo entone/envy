@@ -38,5 +38,7 @@ class WSGI(object):
         else:
             response = Response("404 Not Found: %s" % env['PATH_INFO'][1:], status='404 Not Found')
         
-        start_response(response.status, response.headers)
-        return response.body
+
+        if response:
+            start_response(response.status, response.headers)
+            return response.body
