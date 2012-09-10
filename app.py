@@ -17,6 +17,17 @@ except Exception as e:
 
 wsgi = WSGI(urls, server_settings)
 
+def log_request(self):
+    log = self.server.log
+    if log:
+        if hasattr(log, "info"):
+            log.info(self.format_request())
+        else:
+            log.write(self.format_request())
+
+import gevent
+gevent.pywsgi.WSGIHandler.log_request = log_request
+
 def serve(env, start_response):
     try:
 

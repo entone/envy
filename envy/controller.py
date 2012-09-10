@@ -1,5 +1,6 @@
 from mako import exceptions
 import logging
+from logging.handlers import SysLogHandler
 
 class Controller(object):
     request = None
@@ -11,6 +12,8 @@ class Controller(object):
         self.session = session
         self.settings = settings
         self.logger = logging.getLogger("%s.%s" % (self.__module__, self.__class__.__name__))
+        handler = SysLogHandler(address='/dev/log')
+        self.logger.addHandler(handler)
 
     def render(self, temp, **kwargs):
         try:
