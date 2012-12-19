@@ -24,7 +24,10 @@ class WSGI(object):
             url = self.match(env['PATH_INFO'][1:])
             request = Request(env)
             session_key = request.COOKIE.get(self.settings.get('session_key'))
-            session = self.settings.get("session_cls")(key=session_key, request=request)
+            try:
+                session = self.settings.get("session_cls")(key=session_key, request=request)
+            except Exception as e:
+                session = self.settings.get("session_cls")(key=None, request=request)
         except Exception as e:
             logging.exception(e)
         if url:
