@@ -28,7 +28,7 @@ class WSGI(object):
             try:
                 session = self.settings.get("session_cls")(key=session_key, request=request)
             except SessionEnd as e:
-                start_response('302', [('Location', self.settings.get('session_end_redirect'))])
+                start_response('301 Moved Permanently', [('Location', self.settings.get('session_end_redirect'))])
                 return "Session Ended"
             except Exception as e:
                 session = self.settings.get("session_cls")(key=None, request=request)
