@@ -4,6 +4,7 @@ from .session import SessionEnd
 from .request import Request
 from mako.lookup import TemplateLookup
 import logging
+import json
 
 class WSGI(object):
     urls = None
@@ -28,7 +29,10 @@ class WSGI(object):
             try:
                 session = self.settings.get("session_cls")(key=session_key, request=request)
             except SessionEnd as e:
-                res = Response(body='SessionEnded', status='301 Moved Permanently', headers=[('Location', self.settings.get('session_end_redirect'))])
+                if env.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest':
+                    res = Response(body=json.dumps(dict(status='redirect', location=self.settings.get('session_end_redirect'))))
+                else:
+                    res = Response(body='SessionEnded', status='301 Moved Permanently', headers=[('Location', self.settings.get('session_end_redirect'))])
                 res.cookie(self.settings.get('session_key'), "")
                 start_response(res.status, res.headers)
                 return res.body

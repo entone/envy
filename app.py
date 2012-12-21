@@ -29,8 +29,7 @@ import gevent
 gevent.pywsgi.WSGIHandler.log_request = log_request
 
 def serve(env, start_response):
-    try:
-
+    try:        
         return wsgi.serve(env, start_response)
     except Exception as e:
         print e
