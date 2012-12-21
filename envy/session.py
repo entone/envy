@@ -1,3 +1,5 @@
+class SessionEnd(Exception):pass
+
 class Session(dict):
     key = None
     request = None

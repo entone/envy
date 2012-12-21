@@ -9,7 +9,7 @@ try:
 
     server_settings = dict(
         template_dirs=settings.TEMPLATE_DIRS, 
-        session_key='session_id', 
+        session_key='automaton_session', 
         session_cls=CookieSession
     )    
 except Exception as e:

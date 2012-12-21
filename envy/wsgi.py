@@ -1,5 +1,6 @@
 from .response import Response
 from .session import Session
+from .session import SessionEnd
 from .request import Request
 from mako.lookup import TemplateLookup
 import logging
@@ -19,13 +20,16 @@ class WSGI(object):
             if res: return u
         return False
 
-    def serve(self, env, start_response):
+    def serve(self, env, start_response, session=None):
         try:
             url = self.match(env['PATH_INFO'][1:])
             request = Request(env)
             session_key = request.COOKIE.get(self.settings.get('session_key'))
             try:
                 session = self.settings.get("session_cls")(key=session_key, request=request)
+            except SessionEnd as e:
+                start_reponse('302', [('Location', self.settings.get('session_end_redirect'))])
+                return "Session Ended"
             except Exception as e:
                 session = self.settings.get("session_cls")(key=None, request=request)
         except Exception as e:
