@@ -14,11 +14,11 @@ class Response(object):
         self.headers.append(('Content-Length', str(len(self.body))))
 
 
-    def cookie(self, key, value, expires=None, path='/', httponly=False):
+    def cookie(self, key, value, expires='', path='/', httponly=False):
         self._cookie[key] = value
         self._cookie[key]['expires'] = expires
         self._cookie[key]['path'] = path
         self._cookie[key]['httponly'] = httponly
-        self.headers.append(('Set-Cookie', self._cookie[key].output(header='')))
+        self.headers.append(('set-cookie', self._cookie[key].output(header='')))
 
 
